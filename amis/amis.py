@@ -1,15 +1,15 @@
-from amis.component.AmisButton import AmisButton
-from amis.component.AmisPage import AmisPage
+from amis.component.button import button
+from amis.component.page import page
 
 
 class Amis:
     @staticmethod
-    def button() -> AmisButton:
-        return AmisButton()
+    def button() -> button:
+        return button()
 
     @staticmethod
-    def page() -> AmisPage:
-        return AmisPage()
+    def page() -> page:
+        return page()
 
 def amis() -> Amis:
     return Amis()

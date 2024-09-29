@@ -1,9 +1,7 @@
-from amis.component.AmisComponent import AmisComponent
-import json
-from typing import List, Dict, Any, Union, Literal
+from amis.AmisComponent import AmisComponent
 
 
-class AmisPage(AmisComponent):
+class page(AmisComponent):
     def __init__(self):
         super().__init__("page")
 

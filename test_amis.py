@@ -13,3 +13,5 @@ if __name__ == "__main__":
     )
     amis_json = page.to_json()
     print(amis_json)
+    amis_html = page.to_html()
+    print(amis_html)
