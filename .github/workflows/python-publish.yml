@@ -1,0 +1,85 @@
+name: publish to PyPI
+
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'
+      - .gitignore
+      - .editorconfig
+
+permissions: write-all # 给所有工作写权限
+#  release:
+#    types: [created]
+
+
+jobs:
+  jobs_v:
+    name: 构建版本号和变更信息
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.create_version.outputs.NewVersion }}  # 版本号
+      body: ${{ steps.create_body.outputs.Body }} # 版本变更内容
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: 检查是否 "发布"
+        run: |
+          latest_commit_message=$(git log -1 --pretty=%B)
+          if [[ $latest_commit_message == *"发布"* ]]; then
+            echo "找到发布关键字继续工作流"
+          else
+            echo "没有找到发布关键字停止工作流"
+            exit 1  # 停止工作流程
+          fi
+      - name: 递增版本号
+        id: create_version
+        uses: duolabmeng6/action-autotag-python@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 获取更新日志
+        id: create_body
+        uses: duolabmeng6/action-Releases-log@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILE: .github/releasesText.md
+          KEYS: bug,改进,优化,新增,删除
+      - name: 查看版本号和更新日志
+        run: |
+          echo ${{ format('version={0}', steps.create_version.outputs.NewVersion ) }}
+          echo "${{ steps.create_body.outputs.Body }}"
+
+  deploy:
+    name: 发布到pypi
+    needs: [ jobs_v ]
+    runs-on: ubuntu-latest
+    env:
+      version: ${{ needs.jobs_v.outputs.version }}
+      body: ${{ needs.jobs_v.outputs.Body }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: 生成版本号
+        shell: bash
+        run: |
+          python run_output_version.py
+          cat setup.py
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+      - name: Build package
+        run: python -m build
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
