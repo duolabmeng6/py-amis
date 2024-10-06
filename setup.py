@@ -8,10 +8,11 @@ def install_requires():
         return []
 
 
+
 setup(
     name='py-amis',
     version="0.0.0",
-    description='A file storage management package supporting various providers like S3, OSS, and Qiniu.',
+    description='This is the Python version of the AMIS component encapsulated by Baidu.',
     long_description=open('README.md').read(),  #
     long_description_content_type='text/markdown',
     author='duolabmeng6',
