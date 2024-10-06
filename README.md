@@ -1,5 +1,7 @@
 # python-amis
 
+采用 amis 6.8 版本构建的 amis python sdk
+
 # 安装
 ```shell
 pip install python-amis
