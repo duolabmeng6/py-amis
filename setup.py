@@ -10,7 +10,7 @@ def install_requires():
 
 
 setup(
-    name='py-amis',
+    name='pyamis',
     version="0.0.0",
     description='This is the Python version of the AMIS component encapsulated by Baidu. ',
     long_description=open('README.md').read(),  #
@@ -26,7 +26,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.6',
-    keywords="py-amis",
+    keywords="pyamis",
     include_package_data=True,  # 包含包中的所有文件
     exclude_package_data={
         '': ['.env'],  # 排除 .env 文件

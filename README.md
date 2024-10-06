@@ -1,4 +1,4 @@
-# py-amis
+# pyamis
 
 ```python
 import random
