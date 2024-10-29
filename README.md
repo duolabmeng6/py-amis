@@ -2,6 +2,13 @@
 
 采用 amis 6.8 版本构建的 amis python sdk
 
+这里下载amis的sdk https://github.com/baidu/amis/releases
+
+设置静态目录
+```
+app.mount("/jssdk", StaticFiles(directory="public/jssdk", html=True), name="static")
+```
+
 # 安装
 ```shell
 pip install python-amis
